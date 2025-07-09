@@ -8,37 +8,53 @@ import { format } from 'date-fns';
 
 // Styles for the PDF
 const styles = StyleSheet.create({
-	page: {
-		padding: 20,
-		paddingBottom: 50,
-		paddingTop: 80,
-		fontSize: 14,
-		fontFamily: 'Helvetica',
-		border: '1pt solid black',
-		width: '100%',
-		height: '100%'
-	},
+ page: {
+  paddingBottom: 100,
+  paddingTop: 100,
+  paddingHorizontal: 40,
+  // backgroundColor: '#b7d7db',
+  fontSize: 10,
+  fontFamily: 'Helvetica',
+  borderWidth: 2,                 
+  borderColor: '#ADD8E6',          
+  borderStyle: 'solid',            
+  width: '100%',
+  height: '100%',
+},
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 15
+		marginBottom:2
 	},
 	storeInfo: {
-		flexDirection: 'column'
+		flexDirection: 'column',
+		fontSize:12,
+		gap:0.5
 	},
 	affiliateInfo: {
+		paddingTop:8,
+		fontSize: 12,
+		gap:0.5,
+		 
 		flexDirection: 'column',
-		alignItems: 'flex-end'
+		alignItems: 'flex-start'
 	},
 	bold: {
-		fontFamily: 'Helvetica-Bold'
+		 fontFamily: 'Helvetica-Bold'
 	},
+	tealText: {
+  color: '#008080',  
+},
 	section: {
-		marginVertical: 10
+		marginVertical: 6,
+		fontSize:12,
+		marginTop:8
+		
+
 	},
 	heading: {
 		fontSize: 14,
-		fontFamily: 'Helvetica-Bold',
+		 fontFamily: 'Helvetica-Bold',
 		marginBottom: 2
 	},
 	underline: {
@@ -47,22 +63,24 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	table: {
-		width: 'auto',
-		marginBottom: 10
+	//	width: ,
+		marginBottom: 2
 	},
 	tableRow: {
+		 
 		flexDirection: 'row'
 	},
 	tableCell: {
 		padding: 5,
+		gap:3
 		// borderBottom: '0.4pt solid black'
 	},
 	tableHeader: {
-		fontFamily: 'Helvetica-Bold'
+		 fontFamily: 'Helvetica-Bold'
 	},
 	totalRow: {
 		backgroundColor: '#b7d7db',
-		borderRadius: 10,
+		borderRadius: 20,
 		padding: 5
 	},
 	customHeader: {
@@ -74,48 +92,55 @@ const styles = StyleSheet.create({
 		// borderBottom: '0.4pt solid black',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		fontSize: 12,
+		fontSize: 14,
 	},
 });
 
 // Header Component with Inline Styling
-function HeaderComponent({ title, width }) {
-	return (
-	<View
-	  style={{
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: 20, // Matches gap-5 (approximated as 20pt in PDF context)
-	  }}
-	>
-	  <View
-		style={{
-		  padding: 10, // Matches p-5 (approximated as 20pt in PDF context)
-		  borderWidth: 2,
-		  borderColor: 'black',
-		  ...(width ? { width } : { width: '300px' }),
-		}}
-	  >
-		<Text
-		  style={{
-			fontSize: 12, // Matches Typography variant="body1" (approximate size)
-			fontFamily: 'Helvetica-Bold', // Matches fontWeight="bold"
-		  }}
-		>
-		  {title}
-		</Text>
-	  </View>
-	  <View
-		style={{
-		  height: 2,
-		  backgroundColor: 'black',
-		  width: '100%',
-		}}
-	  />
-	</View>
+// Header Component with box + divider line
+function HeaderComponent({ title }) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 4,
+      }}
+    >
+      {/* Text inside a tight box */}
+      <View
+        style={{
+          border: '2pt solid black',
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingLeft: 8,
+          paddingRight: 8,
+          alignSelf: 'flex-start',
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 12,
+             fontFamily: 'Helvetica-Bold',
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+
+      {/* Horizontal line that fills the remaining space */}
+      <View
+        style={{
+          height: 1,
+          backgroundColor: 'black',
+          flex: 1,
+          marginLeft: 10,
+        }}
+      />
+    </View>
   );
 }
+
 
 // PDF Document Component
 function PdfDocument({ statementData }) {
@@ -133,11 +158,13 @@ function PdfDocument({ statementData }) {
 						pageNumber > 1 ? (
 							
 							<Text style={{
-								fontSize: 18,
-								fontFamily: 'Helvetica',
-								fontWeight: 'bold',
+								fontSize: 14,
+								// fontFamily: 'Helvetica',
+								fontFamily:'Helvetica-Bold',
+								 fontWeight: 'normal',
 								textAlign: 'center',
-								marginBottom: 100,
+								marginTop: 60,
+							
 								width: '100%'
 							}}>
 								Earnings Period: {format(new Date(statementData.statement_info.payout_from * 1000), 'MMM dd, yyyy')} -{' '}
@@ -151,40 +178,47 @@ function PdfDocument({ statementData }) {
 				<View style={styles.header}>
 					<View style={styles.storeInfo}>
 						{/* Logo placeholder */}
+						 
+
 						<Image
-							src="/assets/images/logo/logo.png" // Adjust the path as needed
-							style={{ width: 60, height: 60, marginBottom: 5 }}
+						src="logo.png" alt="glasses"
+						style={{ width: 73, height: 73}}
 						/>
-						<Text style={{ marginTop: 5 }}>{statementData.store_info.name}</Text>
-						<Text>{statementData.store_info.address}</Text>
+						<Text style={{ marginTop: 3 }}>{statementData.store_info.name}</Text>
+						<Text style={{width:140}}>{statementData.store_info.address}</Text>
+						 
+
 					</View>
 					<View style={styles.affiliateInfo}>
 						<Text style={styles.bold}>Affiliate information:</Text>
 						<Text>{statementData.affiliate.name}</Text>
 						<Text>{statementData.affiliate.address || 'N/A'}</Text>
+						 
 						<Text>{statementData.affiliate.email}</Text>
-						<Text>SSN: [Redacted]</Text>
+						<Text>SSN:***_***-7414</Text>
 					</View>
 				</View>
 
 				{/* Earnings Period */}
-				<Text style={[styles.bold, { marginBottom: 15, width: '100%', textAlign: 'center', fontSize: 18, marginTop: 50 }]}>
+				<Text style={[styles.bold, { marginLeft: 20, marginTop: 20, width: '100%', textAlign: 'center', fontSize: 14 }]}>
 					{format(new Date(statementData.statement_info.payout_from * 1000), 'MMM dd, yyyy')} -{' '}
 					{format(new Date(statementData.statement_info.payout_to * 1000), 'MMM dd, yyyy')} Earnings Period
 				</Text>
+
+
 
 				{/* Payout Summary */}
 				<View style={styles.section}>
 					<HeaderComponent title="Payout Summary" />
 					<View style={styles.table}>
 						<View style={[styles.tableRow, styles.tableHeader]}>
-							<Text style={[styles.tableCell, { width: '50%' }]} />
-							<Text style={[styles.tableCell, { width: '25%' }]}>Instances</Text>
-							<Text style={[styles.tableCell, { width: '25%' }]}>Amount</Text>
+							<Text style={[styles.tableCell, { width: '35%' }]} />
+							<Text style={[styles.tableCell, { width: '22%' }]}>Instances</Text>
+							<Text style={[styles.tableCell, { width: '5%' }]}>Amount</Text>
 						</View>
 						<View style={styles.tableRow}>
-							<Text style={[styles.tableCell, { width: '50%' }]}>Monthly renewals:</Text>
-							<Text style={[styles.tableCell, { width: '25%' }]}>
+							<Text style={[styles.tableCell, { width: '36%' }]}>Monthly renewals:</Text>
+							<Text style={[styles.tableCell, { width: '21%' }]}>
 								{statementData.payout_summary.monthly.instances}
 							</Text>
 							<Text style={[styles.tableCell, { width: '25%' }]}>
@@ -192,8 +226,8 @@ function PdfDocument({ statementData }) {
 							</Text>
 						</View>
 						<View style={styles.tableRow}>
-							<Text style={[styles.tableCell, { width: '50%' }]}>Annual renewals:</Text>
-							<Text style={[styles.tableCell, { width: '25%' }]}>
+							<Text style={[styles.tableCell, { width: '36%' }]}>Annual renewals:</Text>
+							<Text style={[styles.tableCell, { width: '21%' }]}>
 								{statementData.payout_summary.yearly.instances}
 							</Text>
 							<Text style={[styles.tableCell, { width: '25%' }]}>
@@ -201,33 +235,87 @@ function PdfDocument({ statementData }) {
 							</Text>
 						</View>
 						<View style={styles.tableRow}>
-							<Text style={[styles.tableCell, { width: '50%' }]}>Bounties:</Text>
-							<Text style={[styles.tableCell, { width: '25%' }]}>
+							<Text style={[styles.tableCell, { width: '36%' }]}>Bounties:</Text>
+							<Text style={[styles.tableCell, { width: '21%' }]}>
 								{statementData.payout_summary.bounties.instances}
 							</Text>
 							<Text style={[styles.tableCell, { width: '25%' }]}>
 								${statementData.payout_summary.bounties.amount.toFixed(2)}
 							</Text>
 						</View>
-						<View style={[styles.tableRow, styles.totalRow, { borderBottom: 'none' }]}>
-							<Text style={[styles.tableCell, styles.bold, { width: '50%' }]}>Total payout:</Text>
-							<Text style={[styles.tableCell, { width: '25%' }]} />
-							<Text style={[styles.tableCell, styles.bold, { width: '25%' }]}>
+						 
+					 	 <View style={{ marginTop: 4, marginBottom: 4 }}>
+						{/* Top short black line same width as teal box */}
+						<View
+							style={{
+							width: 250, // Match or slightly larger than the teal box width
+							height: 1,
+							backgroundColor: 'black',
+							marginBottom: 5,
+							marginLeft:105,
+							}}
+						/>
+
+						{/* Teal Box + Right Side Line */}
+						<View
+							style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							}}
+						>
+							{/* Teal Pill Box */}
+							<View
+							style={{
+								flexDirection: 'row',
+								backgroundColor: '#b7d7db',
+								borderRadius: 20,
+								paddingVertical: 6,
+								paddingHorizontal: 10,
+								gap: 200,
+							}}
+							>
+							<Text
+								style={{
+								 fontFamily: 'Helvetica-Bold',
+								fontSize: 12,
+								color: 'black',
+								}}
+							>
+								Total payout:
+							</Text>
+							<Text
+								style={{
+								 fontFamily: 'Helvetica-Bold',
+								fontSize: 12,
+								color: 'black',
+								}}
+							>
 								${statementData.payout_summary.total_payout.toFixed(2)}
 							</Text>
+							</View>
+
+							{/* Extending Line to Right */}
+							<View
+							
+							/>
 						</View>
+						</View>
+
+
+
 					</View>
 				</View>
+
+
+
 
 				{/* Monthly Renewal Summary */}
 				<View style={styles.section}>
 					<HeaderComponent title="Monthly Renewal Summary"  width='300px'/>
-					{/* <Text style={styles.heading}>Monthly Renewal Summary</Text> */}
-					{/* <View style={[styles.underline, { width: '35%' }]} /> */}
 					<View style={styles.table}>
 						<View style={[styles.tableRow, styles.tableHeader]}>
-							<Text style={[styles.tableCell, { width: '33%' }]}>Date</Text>
-							<Text style={[styles.tableCell, { width: '34%' }]}>Customer name</Text>
+							<Text style={[styles.tableCell, { width: '185%' }]}>Date</Text>
+							<Text style={[styles.tableCell, { width: '110%' }]}>Customer name</Text>
 							<Text style={[styles.tableCell, { width: '33%' }]}>Payout</Text>
 						</View>
 						{statementData.monthly_summary.map((item, idx) => (
@@ -235,25 +323,25 @@ function PdfDocument({ statementData }) {
 								key={idx}
 								style={styles.tableRow}
 							>
-								<Text style={[styles.tableCell, { width: '33%' }]}>
+								<Text style={[styles.tableCell, { width: '193%' }]}>
 									{format(new Date(item.date * 1000), 'MMM dd, yyyy')}
 								</Text>
-								<Text style={[styles.tableCell, { width: '34%' }]}>{item.customer_name}</Text>
+								<Text style={[styles.tableCell, { width: '115%' }]}>{item.customer_name}</Text>
 								<Text style={[styles.tableCell, { width: '33%' }]}>${item.amount.toFixed(2)}</Text>
 							</View>
 						))}
 					</View>
 				</View>
 
+
+
 				{/* Yearly Renewal Summary */}
 				<View style={styles.section}>
 					<HeaderComponent title="Annual Renewal Summary" />
-					{/* <Text style={styles.heading}>Yearly Renewal Summary</Text> */}
-					{/* <View style={[styles.underline, { width: '35%' }]} /> */}
 					<View style={styles.table}>
 						<View style={[styles.tableRow, styles.tableHeader]}>
-							<Text style={[styles.tableCell, { width: '33%' }]}>Date</Text>
-							<Text style={[styles.tableCell, { width: '34%' }]}>Customer name</Text>
+							<Text style={[styles.tableCell, { width: '183%' }]}>Date</Text>
+							<Text style={[styles.tableCell, { width: '110%' }]}>Customer name</Text>
 							<Text style={[styles.tableCell, { width: '33%' }]}>Payout</Text>
 						</View>
 						{statementData.yearly_summary.map((item, idx) => (
@@ -261,10 +349,10 @@ function PdfDocument({ statementData }) {
 								key={idx}
 								style={styles.tableRow}
 							>
-								<Text style={[styles.tableCell, { width: '33%' }]}>
+								<Text style={[styles.tableCell, { width: '193%' }]}>
 									{format(new Date(item.date * 1000), 'MMM dd, yyyy')}
 								</Text>
-								<Text style={[styles.tableCell, { width: '34%' }]}>{item.customer_name}</Text>
+								<Text style={[styles.tableCell, { width: '115%' }]}>{item.customer_name}</Text>
 								<Text style={[styles.tableCell, { width: '33%' }]}>${item.amount.toFixed(2)}</Text>
 							</View>
 						))}
@@ -278,8 +366,8 @@ function PdfDocument({ statementData }) {
 					{/* <View style={[styles.underline, { width: '15%' }]} /> */}
 					<View style={styles.table}>
 						<View style={[styles.tableRow, styles.tableHeader]}>
-							<Text style={[styles.tableCell, { width: '33%' }]}>Date</Text>
-							<Text style={[styles.tableCell, { width: '34%' }]}>Customer name</Text>
+							<Text style={[styles.tableCell, { width: '183%' }]}>Date</Text>
+							<Text style={[styles.tableCell, { width: '110%' }]}>Customer name</Text>
 							<Text style={[styles.tableCell, { width: '33%' }]}>Payout</Text>
 						</View>
 						{statementData.bounties_summary.map((item, idx) => (
@@ -287,10 +375,10 @@ function PdfDocument({ statementData }) {
 								key={idx}
 								style={styles.tableRow}
 							>
-								<Text style={[styles.tableCell, { width: '33%' }]}>
+								<Text style={[styles.tableCell, { width: '193%' }]}>
 									{format(new Date(item.date * 1000), 'MMM dd, yyyy')}
 								</Text>
-								<Text style={[styles.tableCell, { width: '34%' }]}>{item.customer_name}</Text>
+								<Text style={[styles.tableCell, { width: '115%' }]}>{item.customer_name}</Text>
 								<Text style={[styles.tableCell, { width: '33%' }]}>${item.amount.toFixed(2)}</Text>
 							</View>
 						))}
